@@ -6,7 +6,7 @@
 /*   By: feden-pe <feden-pe@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:46:05 by feden-pe          #+#    #+#             */
-/*   Updated: 2023/06/01 18:56:22 by feden-pe         ###   ########.fr       */
+/*   Updated: 2023/06/02 13:03:54 by feden-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	send_len(int pid, int len)
 void	handle_sig(int sig)
 {
 	if (sig == SIGUSR1)
-		ft_printf("Message received by the server\n");
+		ft_printf("The server succesfully received the message\n");
 }
 
 int	main(int ac, char **av)

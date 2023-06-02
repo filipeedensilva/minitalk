@@ -6,7 +6,7 @@
 #    By: feden-pe <feden-pe@student.42lisboa.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/27 18:31:55 by feden-pe          #+#    #+#              #
-#    Updated: 2023/06/01 19:05:24 by feden-pe         ###   ########.fr        #
+#    Updated: 2023/06/02 13:10:19 by feden-pe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,9 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror
 
-INCLUDES = -I$(HEADERS_DIRECTORY)
+EXCL = client
 
-HEADERS_DIRECTORY = ./includes/
-HEADERS_LIST = minitalk.h\
-
-CL = client
-
-SV = server
+EXSV = server
 
 RM = rm -f
 
@@ -33,13 +28,13 @@ SRCCL = client.c
 
 SRCSV = server.c
 
-all:	$(CL) $(SV)
+all:	$(EXSV) $(EXCL)
 
-$(CL):	$(LIBFT) $(FT_PRINTF) $(SRCCL)
-	$(CC) $(CFLAGS) $(SRCCL) $(FT_PRINTF) $(LIBFT) $(INCLUDES) -o $(CL) -g
+$(EXSV):	$(LIBFT) $(FT_PRINTF) $(SRCSV)
+	$(CC) $(CFLAGS) $(SRCSV) $(FT_PRINTF) $(LIBFT) -o $(EXSV) -g
 
-$(SV):	$(FT_PRINTF) $(SRCSV)
-	$(CC) $(CFLAGS) $(SRCSV) $(FT_PRINTF) $(LIBFT) $(INCLUDES) -o $(SV) -g
+$(EXCL):	$(LIBFT) $(FT_PRINTF) $(SRCCL)
+	$(CC) $(CFLAGS) $(SRCCL) $(FT_PRINTF) $(LIBFT) -o $(EXCL) -g
 
 $(LIBFT):
 	make -C ./libft
@@ -50,11 +45,10 @@ $(FT_PRINTF):
 clean:
 	make clean -C ./libft
 	make clean -C ./ft_printf
-	$(RM)
 
 fclean:	clean
 	make fclean -C ./libft
 	make fclean -C ./ft_printf
-	$(RM) $(CL) $(SV)
+	$(RM) $(EXSV) $(EXCL)
 
-re:	fclean $(CL) $(SV)
+re:	fclean $(EXSV) $(EXCL)
