@@ -6,7 +6,7 @@
 /*   By: feden-pe <feden-pe@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:51:35 by feden-pe          #+#    #+#             */
-/*   Updated: 2023/06/01 18:54:52 by feden-pe         ###   ########.fr       */
+/*   Updated: 2023/06/02 20:23:58 by feden-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,9 @@ void	handle_sig(int sig, siginfo_t *info, void *context);
 
 typedef struct s_var
 {
-	struct sigaction	sa;
-	int			len;
-	int			cpid;
-	char			*str;
+	struct sigaction	sg;
+	int					len;
+	char				*str;
 }	t_var;
 
 static t_var	g_var;
@@ -35,7 +34,7 @@ void	handle_sig(int sig, siginfo_t *info, void *content)
 	if (sig == SIGUSR1)
 		c |= 1 << bit;
 	else
-	 	c |= 0 << bit;
+		c |= 0 << bit;
 	bit++;
 	if (bit == 8)
 	{
@@ -45,7 +44,7 @@ void	handle_sig(int sig, siginfo_t *info, void *content)
 			write(1, g_var.str, g_var.len);
 			free(g_var.str);
 			g_var.len = 0;
-			g_var.sa.sa_sigaction = receive_len;
+			g_var.sg.sa_sigaction = receive_len;
 			i = 0;
 			kill(info->si_pid, SIGUSR1);
 		}
@@ -68,7 +67,7 @@ void	receive_len(int sig, siginfo_t *info, void *context)
 	if (bit == 32)
 	{
 		g_var.str = (char *)malloc(sizeof(char) * g_var.len + 1);
-		g_var.sa.sa_sigaction = handle_sig;
+		g_var.sg.sa_sigaction = handle_sig;
 		bit = 0;
 	}
 }
@@ -79,17 +78,17 @@ int	main(int ac, char **av)
 
 	(void)av;
 	if (ac != 1)
-		ft_printf("Invalid number of arguments\nUsage: ./server\n");
+		ft_printf("Incorrect number of arguments!\nUsage: ./server\n");
 	else
 	{
 		pid = getpid();
-		ft_printf("Server PID: %d\nOn standby for a message...\n", pid);
-		g_var.sa.sa_sigaction = receive_len;
-		g_var.sa.sa_flags = SA_SIGINFO;
+		ft_printf("PID: %d\nOn standby for message...\n", pid);
+		g_var.sg.sa_sigaction = receive_len;
+		g_var.sg.sa_flags = SA_SIGINFO;
 		while (1)
 		{
-			sigaction(SIGUSR1, &g_var.sa, 0);
-			sigaction(SIGUSR2, &g_var.sa, 0);
+			sigaction(SIGUSR1, &g_var.sg, 0);
+			sigaction(SIGUSR2, &g_var.sg, 0);
 			pause();
 		}
 	}

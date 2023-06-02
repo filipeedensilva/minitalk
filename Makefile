@@ -6,7 +6,7 @@
 #    By: feden-pe <feden-pe@student.42lisboa.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/27 18:31:55 by feden-pe          #+#    #+#              #
-#    Updated: 2023/06/02 13:10:19 by feden-pe         ###   ########.fr        #
+#    Updated: 2023/06/02 20:17:54 by feden-pe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,10 +31,10 @@ SRCSV = server.c
 all:	$(EXSV) $(EXCL)
 
 $(EXSV):	$(LIBFT) $(FT_PRINTF) $(SRCSV)
-	$(CC) $(CFLAGS) $(SRCSV) $(FT_PRINTF) $(LIBFT) -o $(EXSV) -g
+	$(CC) $(CFLAGS) $(SRCSV) $(FT_PRINTF) $(LIBFT) -o $(EXSV)
 
 $(EXCL):	$(LIBFT) $(FT_PRINTF) $(SRCCL)
-	$(CC) $(CFLAGS) $(SRCCL) $(FT_PRINTF) $(LIBFT) -o $(EXCL) -g
+	$(CC) $(CFLAGS) $(SRCCL) $(FT_PRINTF) $(LIBFT) -o $(EXCL)
 
 $(LIBFT):
 	make -C ./libft
@@ -52,3 +52,5 @@ fclean:	clean
 	$(RM) $(EXSV) $(EXCL)
 
 re:	fclean $(EXSV) $(EXCL)
+
+.PHONY: all clean fclean re
