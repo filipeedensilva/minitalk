@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server.c                                      |  _____|_____   |  |      */
 /*                                                    +:+ +:+         +:+     */
 /*   By: feden-pe <feden-pe@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:51:35 by feden-pe          #+#    #+#             */
-/*   Updated: 2023/06/02 20:23:58 by feden-pe         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:13:05 by fede     |__|     |_______| |__| |__|    */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+#include <unistd.h>
 
 void	receive_len(int sig, siginfo_t *info, void *context);
 void	handle_sig(int sig, siginfo_t *info, void *context);
+void	print_message(void);
 
 typedef struct s_var
 {
@@ -24,34 +26,15 @@ typedef struct s_var
 
 static t_var	g_var;
 
-void	handle_sig(int sig, siginfo_t *info, void *content)
+void	print_message(void)
 {
-	static int	bit;
-	static char	c;
-	static int	i;
-
-	(void)content;
-	if (sig == SIGUSR1)
-		c |= 1 << bit;
-	else
-		c |= 0 << bit;
-	bit++;
-	if (bit == 8)
-	{
-		g_var.str[i++] = c;
-		if (c == '\0')
-		{
-			write(1, g_var.str, g_var.len);
-			free(g_var.str);
-			g_var.len = 0;
-			g_var.sg.sa_sigaction = receive_len;
-			i = 0;
-			kill(info->si_pid, SIGUSR1);
-		}
-		bit = 0;
-		c = 0;
-	}
+	write(1, g_var.str, g_var.len);
+	write(1, "\n", 1);
+	free(g_var.str);
+	g_var.len = 0;
+	g_var.sg.sa_sigaction = receive_len;
 }
+
 
 void	receive_len(int sig, siginfo_t *info, void *context)
 {
@@ -69,6 +52,32 @@ void	receive_len(int sig, siginfo_t *info, void *context)
 		g_var.str = (char *)malloc(sizeof(char) * g_var.len + 1);
 		g_var.sg.sa_sigaction = handle_sig;
 		bit = 0;
+	}
+}
+
+void	handle_sig(int sig, siginfo_t *info, void *content)
+{
+	static int	bit;
+	static char	c;
+	static int	i;
+
+	(void)content;
+	if (sig == SIGUSR1)
+		c |= 1 << bit;
+	else
+		c |= 0 << bit;
+	bit++;
+	if (bit == 8)
+	{
+		g_var.str[i++] = c;
+		if (i + 1 == g_var.len)
+		{
+			print_message();
+			i = 0;
+			kill(info->si_pid, SIGUSR1);
+		}
+		bit = 0;
+		c = 0;
 	}
 }
 

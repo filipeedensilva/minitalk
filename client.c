@@ -6,7 +6,7 @@
 /*   By: feden-pe <feden-pe@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 23:46:05 by feden-pe          #+#    #+#             */
-/*   Updated: 2023/06/02 20:21:40 by feden-pe         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:26:13 by feden-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@ int	main(int ac, char **av)
 		send_len(pid, len);
 		while (av[2][i])
 			send_sig(pid, av[2][i++]);
-		send_sig(pid, '\n');
-		send_sig(pid, '\0');
 	}
 	else
 	{
